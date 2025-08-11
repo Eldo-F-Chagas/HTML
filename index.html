@@ -28,6 +28,23 @@
                     <input type="text" id="searchInput" placeholder="Search components...">
                     <button id="searchBtn"><i class="fas fa-search"></i></button>
                 </div>
+                <div class="auth-buttons">
+                    <button id="loginBtn" class="auth-btn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                    <button id="registerBtn" class="auth-btn">
+                        <i class="fas fa-user-plus"></i> Register
+                    </button>
+                    <div id="userMenu" class="user-menu" style="display: none;">
+                        <span id="userEmail"></span>
+                        <button id="sellerDashboardBtn" class="auth-btn">
+                            <i class="fas fa-store"></i> Seller Dashboard
+                        </button>
+                        <button id="logoutBtn" class="auth-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
                 <div class="cart">
                     <button id="cartBtn">
                         <i class="fas fa-shopping-cart"></i>
@@ -130,6 +147,248 @@
             <div class="cart-total">
                 <h3>Total: $<span id="cartTotal">0.00</span></h3>
                 <button class="checkout-btn">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Register as Seller</h3>
+                <span class="close" onclick="closeModal('registerModal')">&times;</span>
+            </div>
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="registerEmail">Gmail Address:</label>
+                    <input type="email" id="registerEmail" name="email" required
+                           pattern=".*@gmail\.com$"
+                           title="Please enter a valid Gmail address">
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password:</label>
+                    <input type="password" id="registerPassword" name="password" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="businessName">Business Name:</label>
+                    <input type="text" id="businessName" name="businessName" required>
+                </div>
+                <div class="form-group">
+                    <label for="businessDescription">Business Description:</label>
+                    <textarea id="businessDescription" name="businessDescription" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+                <p class="auth-switch">Already have an account? <a href="#" onclick="switchToLogin()">Login here</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Login</h3>
+                <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            </div>
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="loginEmail">Gmail Address:</label>
+                    <input type="email" id="loginEmail" name="email" required
+                           pattern=".*@gmail\.com$"
+                           title="Please enter a valid Gmail address">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <p class="auth-switch">Don't have an account? <a href="#" onclick="switchToRegister()">Register here</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Seller Dashboard Modal -->
+    <div id="sellerDashboardModal" class="modal">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h3>Seller Dashboard</h3>
+                <span class="close" onclick="closeModal('sellerDashboardModal')">&times;</span>
+            </div>
+            <div class="dashboard-content">
+                <div class="dashboard-tabs">
+                    <button class="tab-btn active" onclick="showTab('products')">My Products</button>
+                    <button class="tab-btn" onclick="showTab('add-product')">Add Product</button>
+                    <button class="tab-btn" onclick="showTab('orders')">Orders</button>
+                </div>
+
+                <!-- Products Tab -->
+                <div id="products-tab" class="tab-content active">
+                    <h4>Your Products</h4>
+                    <div id="sellerProducts" class="seller-products-grid">
+                        <!-- Seller's products will be displayed here -->
+                    </div>
+                </div>
+
+                <!-- Add Product Tab -->
+                <div id="add-product-tab" class="tab-content">
+                    <h4>Add New Product</h4>
+                    <form id="addProductForm" class="product-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productName">Product Name:</label>
+                                <input type="text" id="productName" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productPrice">Price ($):</label>
+                                <input type="number" id="productPrice" name="price" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productCategory">Category:</label>
+                                <select id="productCategory" name="category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="microcontrollers">Microcontrollers</option>
+                                    <option value="sensors">Sensors</option>
+                                    <option value="displays">Displays</option>
+                                    <option value="components">Components</option>
+                                    <option value="tools">Tools</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="productStock">Stock Quantity:</label>
+                                <input type="number" id="productStock" name="stock" min="0" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="productDescription">Description:</label>
+                            <textarea id="productDescription" name="description" rows="4" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="productIcon">Icon Class (Font Awesome):</label>
+                            <input type="text" id="productIcon" name="icon" placeholder="e.g., fas fa-microchip" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productImages">Product Images:</label>
+                            <input type="file" id="productImages" name="images" multiple accept="image/*" class="file-input">
+                            <div class="file-input-help">
+                                <small>Select up to 5 images (JPG, PNG, GIF). First image will be the main product image.</small>
+                            </div>
+                            <div id="imagePreview" class="image-preview-container">
+                                <!-- Image previews will appear here -->
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Product</button>
+                    </form>
+                </div>
+
+                <!-- Orders Tab -->
+                <div id="orders-tab" class="tab-content">
+                    <h4>Recent Orders</h4>
+                    <div id="sellerOrders">
+                        <p>No orders yet.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="productDetailModal" class="modal">
+        <div class="modal-content large-modal product-detail-modal">
+            <div class="modal-header">
+                <h3 id="productDetailTitle">Product Details</h3>
+                <span class="close" onclick="closeModal('productDetailModal')">&times;</span>
+            </div>
+            <div class="product-detail-content">
+                <div class="product-detail-left">
+                    <!-- Product Images -->
+                    <div class="product-detail-images">
+                        <div id="productDetailMainImage" class="product-detail-main-image">
+                            <!-- Main image will be displayed here -->
+                        </div>
+                        <div id="productDetailThumbnails" class="product-detail-thumbnails">
+                            <!-- Thumbnail images will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="product-detail-right">
+                    <!-- Product Information -->
+                    <div class="product-detail-info">
+                        <h2 id="productDetailName"></h2>
+                        <div class="product-detail-price">
+                            <span id="productDetailPriceValue"></span>
+                        </div>
+                        <div class="product-detail-rating">
+                            <span id="productDetailRating"></span>
+                            <span id="productDetailRatingText"></span>
+                        </div>
+                        <div class="product-detail-stock">
+                            <span id="productDetailStock"></span>
+                        </div>
+                        <div class="product-detail-category">
+                            <strong>Category:</strong> <span id="productDetailCategory"></span>
+                        </div>
+
+                        <!-- Product Description -->
+                        <div class="product-detail-description">
+                            <h4>Description</h4>
+                            <p id="productDetailDescriptionText"></p>
+                        </div>
+
+                        <!-- Seller Information -->
+                        <div class="product-detail-seller">
+                            <h4>Seller Information</h4>
+                            <div class="seller-info-card">
+                                <div class="seller-info-header">
+                                    <i class="fas fa-store"></i>
+                                    <div class="seller-info-details">
+                                        <h5 id="sellerBusinessName"></h5>
+                                        <p id="sellerEmail"></p>
+                                    </div>
+                                </div>
+                                <div class="seller-info-description">
+                                    <p id="sellerBusinessDescription"></p>
+                                </div>
+                                <div class="seller-info-stats">
+                                    <div class="seller-stat">
+                                        <span class="stat-label">Member Since:</span>
+                                        <span id="sellerMemberSince"></span>
+                                    </div>
+                                    <div class="seller-stat">
+                                        <span class="stat-label">Total Products:</span>
+                                        <span id="sellerTotalProducts"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="product-detail-actions">
+                            <button id="productDetailAddToCart" class="btn btn-primary btn-large">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                            <button id="productDetailContactSeller" class="btn btn-secondary btn-large">
+                                <i class="fas fa-envelope"></i> Contact Seller
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Gallery Modal -->
+    <div id="imageModal" class="image-modal">
+        <div class="image-modal-content">
+            <span class="image-modal-close">&times;</span>
+            <img id="imageModalMain" class="image-modal-main" src="" alt="Product Image">
+            <div id="imageModalThumbnails" class="image-modal-thumbnails">
+                <!-- Thumbnail images will be displayed here -->
             </div>
         </div>
     </div>
